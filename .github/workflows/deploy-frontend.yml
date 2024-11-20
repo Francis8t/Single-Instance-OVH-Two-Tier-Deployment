@@ -1,0 +1,49 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - frontend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Install SSH key for deployment
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          chmod 600 private_key
+
+      # Step 3: Deploy to the frontend server
+      - name: Deploy Frontend to OVHcloud
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.SSH_USER }}@${{ secrets.FRONTEND_IP }} << 'EOF'
+          sudo apt update
+          sudo apt install -y nginx
+          sudo rm -rf /var/www/html/*
+          mkdir -p /var/www/html
+          cat > /var/www/html/index.html << 'EOL'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Frontend App</title>
+          </head>
+          <body>
+              <h1>Welcome to the Frontend!</h1>
+              <p>This is served from OVHcloud.</p>
+          </body>
+          </html>
+          EOL
+          sudo systemctl restart nginx
+          EOF
+      # Step 4: Cleanup
+      - name: Cleanup
+        run: rm -f private_key

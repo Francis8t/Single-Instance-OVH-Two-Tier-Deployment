@@ -1,0 +1,47 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - backend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Install SSH key for deployment
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          chmod 600 private_key
+
+      # Step 3: Deploy to the backend server
+      - name: Deploy Backend to OVHcloud
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.SSH_USER }}@${{ secrets.BACKEND_IP }} << 'EOF'
+          sudo apt update
+          sudo apt install -y python3 python3-pip
+          mkdir -p ~/backend
+          cat > ~/backend/app.py << 'EOL'
+          from flask import Flask
+
+          app = Flask(__name__)
+
+          @app.route('/')
+          def home():
+              return "Hello from the Backend!"
+
+          if __name__ == '__main__':
+              app.run(host='0.0.0.0', port=5000)
+          EOL
+          pip3 install flask
+          nohup python3 ~/backend/app.py > ~/backend/logs.txt 2>&1 &
+          EOF
+      # Step 4: Cleanup
+      - name: Cleanup
+        run: rm -f private_key
