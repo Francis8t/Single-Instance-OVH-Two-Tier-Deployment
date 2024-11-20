@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Tier App Frontend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #response {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Two-Tier Application Frontend</h1>
+    <p>This is the frontend of the application.</p>
+    <button onclick="fetchBackendData()">Fetch Backend Data</button>
+    <div id="response"></div>
+
+    <script>
+        function fetchBackendData() {
+            fetch('http://147.135.79.46:5000/')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('response').innerText = `Backend Response: ${data}`;
+                })
+                .catch(error => {
+                    document.getElementById('response').innerText = `Error: Unable to connect to backend.`;
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
