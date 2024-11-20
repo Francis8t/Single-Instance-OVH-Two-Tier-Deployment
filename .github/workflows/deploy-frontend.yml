@@ -27,10 +27,8 @@ jobs:
           sudo apt update
           sudo apt install -y nginx
           sudo rm -rf /var/www/html/*
-          mkdir -p /var/www/html
-          touch /var/www/html/index.html
-          sudo chmod +x /var/www/html/index.html
-          cat > /var/www/html/index.html << 'EOL'
+          sudo mkdir -p /var/www/html
+          sudo cat > /var/www/html/index.html << 'EOL'
           <!DOCTYPE html>
           <html lang="en">
           <head>
