@@ -39,7 +39,7 @@ jobs:
           if __name__ == '__main__':
               app.run(host='0.0.0.0', port=5000)
           EOL
-          pip3 install flask
+          sudo apt install -y python3-flask
           nohup python3 ~/backend/app.py > ~/backend/logs.txt 2>&1 &
           EOF
       # Step 4: Cleanup
