@@ -41,8 +41,7 @@ jobs:
           EOL
           sudo apt install -y python3-flask
           # Kill any previously running app.py process
-          ps aux | grep "python3 ~/backend/app.py" | grep -v grep | awk '{print $2}' | xargs -r kill\
-          || echo "No previous app.py process found."
+          pkill -f "python3 /home/${{ secrets.SSH_USER }}/backend/app.py" || echo "No previous app.py process found."
           nohup python3 ~/backend/app.py > ~/backend/logs.txt 2>&1 &
           EOF
       # Step 4: Cleanup
