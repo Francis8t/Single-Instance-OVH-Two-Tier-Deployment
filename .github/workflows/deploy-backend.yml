@@ -34,12 +34,14 @@ jobs:
 
           @app.route('/')
           def home():
-              return "Hello from the Backend! Testing Testing!"
+              return "Hello from the Backend! Code Check!"
 
           if __name__ == '__main__':
               app.run(host='0.0.0.0', port=5000)
           EOL
           sudo apt install -y python3-flask
+          # Kill any previously running app.py process
+          pkill -f "python3 ~/backend/app.py" || echo "No previous app.py process found."
           nohup python3 ~/backend/app.py > ~/backend/logs.txt 2>&1 &
           EOF
       # Step 4: Cleanup
