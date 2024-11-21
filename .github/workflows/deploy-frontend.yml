@@ -28,7 +28,7 @@ jobs:
           sudo apt install -y nginx
           sudo rm -rf /var/www/html/*
           sudo mkdir -p /var/www/html
-          sudo cat > /var/www/html/index.html << 'EOL'
+          sudo bash -c 'cat > /var/www/html/index.html << "EOL"
           <!DOCTYPE html>
           <html lang="en">
           <head>
@@ -41,7 +41,7 @@ jobs:
               <p>This is served from OVHcloud.</p>
           </body>
           </html>
-          EOL
+          EOL'
           sudo systemctl restart nginx
           EOF
       # Step 4: Cleanup
