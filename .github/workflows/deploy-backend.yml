@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - backend
-#jobs
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
 
           @app.route('/')
           def home():
-              return "Hello from the Backend! Francis Kariuki"
+              return "Hello from the Backend! Code Check *3!"
 
           if __name__ == '__main__':
               app.run(host='0.0.0.0', port=5000)
@@ -44,6 +44,6 @@ jobs:
           pkill -f "python3 /home/${{ secrets.SSH_USER }}/backend/app.py" || echo "No previous app.py process found."
           nohup python3 ~/backend/app.py > ~/backend/logs.txt 2>&1 &
           EOF
-      # Step 4: Cleanup
+      # Step 4: Cleanup#
       - name: Cleanup
         run: rm -f private_key
