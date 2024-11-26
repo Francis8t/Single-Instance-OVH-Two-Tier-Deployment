@@ -23,7 +23,7 @@ jobs:
       # Step 3: Deploy to the frontend server
       - name: Deploy Frontend to OVHcloud
         run: |
-          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.SSH_USER }}@${{ secrets.FRONTEND_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.SSH_USER }}@${{ secrets.BACKEND_IP }} << 'EOF'
           sudo apt update
           sudo apt install -y nginx
           sudo rm -rf /var/www/html/*
@@ -37,7 +37,7 @@ jobs:
               <title>Frontend App</title>
           </head>
           <body>
-              <h1>Welcome to the Frontend, Francis !</h1>
+              <h1>Welcome to the Frontend, Karis !</h1>
               <p>This is served from OVHcloud.</p>
           </body>
           </html>
