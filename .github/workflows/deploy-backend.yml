@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Install SSH key for deployment
+       # Step 2: Install SSH key for deployment
       - name: Set up SSH key~
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
