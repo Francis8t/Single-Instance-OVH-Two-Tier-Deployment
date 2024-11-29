@@ -64,7 +64,6 @@ jobs:
               <p>Below is a 2025 WRX S4!!!</p>
           </body>
           </html>
-
           EOL'
           sudo systemctl restart nginx
           EOF
