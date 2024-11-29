@@ -23,50 +23,40 @@ jobs:
       # Step 3: Deploy to the frontend server
       - name: Deploy Frontend to OVHcloud
         run: |
-          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.SSH_USER }}@${{ secrets.BACKEND_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.SSH_USER }}@${{ secrets.FRONTEND_IP }} << 'EOF'
           sudo apt update
           sudo apt install -y nginx
-          sudo rm -rf /var/www/html/*
           sudo mkdir -p /var/www/html
           sudo bash -c 'cat > /var/www/html/index.html << "EOL"
           <!DOCTYPE html>
           <html lang="en">
           <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Frontend App</title>
-              <style>
-                  /* Set the background image for the body */
-                  body {
-                      background-image: url('https://franc-s3-ovh-bucket.s3.us-east-va.io.cloud.ovh.us/subaru-wrx-s4-sti-performance-concept.jpg');
-                      background-size: cover; /* Make the image cover the entire background */
-                      background-position: center; /* Center the background image */
-                      color: white; /* Set text color for readability */
-                      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Add shadow for better readability */
-                      font-family: Arial, sans-serif; /* Set a clean font style */
-                  }
-
-                  /* Additional styles for padding and spacing */
-                  h1, p {
-                      padding: 10px;
-                      margin: 0;
-                  }
-
-                  /* Add extra styling to ensure text doesn't cover the whole image */
-                  body {
-                      padding: 20px;
-                  }
-              </style>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Frontend App</title>
+            <style>
+                body {
+                    background-image: url("https://franc-s3-ovh-bucket.s3.us-east-va.io.cloud.ovh.us/subaru-wrx-s4-sti-performance-concept.jpg");
+                    background-size: cover;
+                    background-position: center;
+                    color: white;
+                    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+                    font-family: Arial, sans-serif;
+                }
+                h1, p {
+                    padding: 10px;
+                }
+                body {
+                    padding: 20px;
+                }
+            </style>
           </head>
           <body>
-              <h1>Welcome to the Frontend, Francis K.!</h1>
-              <p>This is served from OVHcloud.</p>
-              <p>Below is a 2025 WRX S4!!!</p>
+            <h1>Welcome to the Frontend, Francis K.!</h1>
+            <p>This is served from OVHcloud.</p>
+            <p>Below is a 2025 WRX S4!!!</p>
           </body>
           </html>
           EOL'
-          sudo systemctl restart nginx
-          EOF
-      # Step 4: Cleanup
-      - name: Cleanup
-        run: rm -f private_key
+            sudo systemctl restart nginx
+            EOF
