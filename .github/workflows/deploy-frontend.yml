@@ -23,6 +23,7 @@ jobs:
           echo "$BASTION_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           echo -e "Host bastion\n  HostName ${{ secrets.BASTION_HOST }}\n  User ${{ secrets.BASTION_USER }}\n  IdentityFile ~/.ssh/id_rsa" > ~/.ssh/config
+          ssh-keyscan -H ${{ secrets.BASTION_HOST }} >> ~/.ssh/known_hosts
 
       # Step 3: Set up the SSH command for accessing the private instance via the bastion host
       - name: Deploy Frontend to OVHcloud via Bastion Host
