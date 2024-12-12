@@ -14,16 +14,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Install SSH key for deployment
-      - name: Set up SSH key
+      # Step 2: Set up SSH key for Bastion Host
+      - name: Set up SSH key for Bastion Host
+        env:
+          BASTION_PRIVATE_KEY: ${{ secrets.BASTION_PRIVATE_KEY }}
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
-          chmod 600 private_key
+          mkdir -p ~/.ssh
+          echo "$BASTION_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo -e "Host bastion\n  HostName ${{ secrets.BASTION_HOST }}\n  User ${{ secrets.BASTION_USER }}\n  IdentityFile ~/.ssh/id_rsa" > ~/.ssh/config
 
-      # Step 3: Deploy to the frontend server
-      - name: Deploy Frontend to OVHcloud
+      # Step 3: Set up the SSH command for accessing the private instance via the bastion host
+      - name: Deploy Frontend to OVHcloud via Bastion Host
+        env:
+          PRIVATE_INSTANCE_IP: ${{ secrets.PRIVATE_INSTANCE_IP }}
+          PRIVATE_INSTANCE_USER: ${{ secrets.PRIVATE_INSTANCE_USER }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.SSH_USER }}@${{ secrets.BACKEND_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -J ${{ secrets.BASTION_USER }}@${{ secrets.BASTION_HOST }} \
+            ${{ secrets.PRIVATE_INSTANCE_USER }}@$PRIVATE_INSTANCE_IP <<EOF
           sudo apt update
           sudo apt install -y nginx
           sudo rm -rf /var/www/html/*
@@ -41,12 +49,13 @@ jobs:
               <p>This is served from OVHcloud.</p>
               <p>Below is a 2025 WRX S4!!!</p>
               <img src="https://franc-s3-ovh-bucket.s3.us-east-va.io.cloud.ovh.us/subaru-wrx-s4-sti-performance-concept.jpg" alt="Subaru WRX S4 STI Performance Concept" style="max-width:100%;height:auto;">
-         
           </body>
           </html>
           EOL'
           sudo systemctl restart nginx
           EOF
+
       # Step 4: Cleanup
       - name: Cleanup
-        run: rm -f private_key
+        run: |
+          rm -rf ~/.ssh/id_rsa ~/.ssh/config
