@@ -35,9 +35,9 @@ jobs:
             ${{ secrets.PRIVATE_INSTANCE_USER }}@$PRIVATE_INSTANCE_IP <<EOF
           sudo apt update
           sudo apt install -y nginx
-          sudo rm -rf /var/www/html/*
-          sudo mkdir -p /var/www/html
-          sudo bash -c 'cat > /var/www/html/index.html << "EOL"
+          sudo rm -rf /usr/share/nginx/html/*
+          sudo mkdir -p /usr/share/nginx/html/
+          sudo bash -c 'cat > /usr/share/nginx/html//index.html << "EOL"
           <!DOCTYPE html>
           <html lang="en">
           <head>
@@ -48,7 +48,7 @@ jobs:
           <body>
               <h1>Welcome to Frontend, Francis K.!</h1>
               <p>This is served from OVHcloud.</p>
-              <p>Below is a 2025 WRX S4!!!</p>
+              <p>Below is the majestic 2025 WRX S4!!!</p>
               <img src="https://franc-s3-ovh-bucket.s3.us-east-va.io.cloud.ovh.us/subaru-wrx-s4-sti-performance-concept.jpg" alt="Subaru WRX S4 STI Performance Concept" style="max-width:100%;height:auto;">
           </body>
           </html>
